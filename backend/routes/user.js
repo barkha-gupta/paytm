@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const User = require("../models/user");
 const authMiddleware = require("../middleware/auth");
+const Account = require("../models/account");
 const router = express.Router();
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -44,6 +45,12 @@ router.post("/signup", async (req, res) => {
         firstname,
         lastname,
         password: hash,
+      });
+
+      const userId = user._id; // used for account creation
+      await Account.create({
+        userId,
+        balance: 1 + Math.random() * 1000,
       });
 
       res.json({
@@ -129,29 +136,35 @@ router.put("/", authMiddleware, async (req, res) => {
 });
 
 router.get("/bulk", async (req, res) => {
-  const filter = req.query.filter || "";
+  try {
+    const filter = req.query.filter || "";
 
-  const users = await User.find({
-    $or: [
-      {
-        firstname: {
-          $regex: filter,
+    const users = await User.find({
+      $or: [
+        {
+          firstname: {
+            $regex: filter,
+          },
+          lastname: {
+            $regex: filter,
+          },
         },
-        lastname: {
-          $regex: lastName,
-        },
-      },
-    ],
-  });
+      ],
+    });
 
-  res.json({
-    users: users.map((user) => ({
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      _id: user._id,
-    })),
-  });
+    res.json({
+      users: users.map((user) => ({
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        _id: user._id,
+      })),
+    });
+  } catch (error) {
+    res.status(401).json({
+      message: error.message,
+    });
+  }
 });
 
 module.exports = router;
