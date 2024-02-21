@@ -95,11 +95,11 @@ router.post("/signin", async (req, res) => {
         message: "User logged in successfully",
         token,
       });
+    } else {
+      return res.status(411).json({
+        message: "Error while logging in",
+      });
     }
-
-    return res.status(411).json({
-      message: "Error while logging in",
-    });
   } catch (error) {
     res.status(401).json({
       message: error.message,
