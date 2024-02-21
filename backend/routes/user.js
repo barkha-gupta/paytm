@@ -48,6 +48,12 @@ router.post("/signup", async (req, res) => {
       });
 
       const userId = user._id; // used for account creation
+      const token = jwt.sign(
+        {
+          userId,
+        },
+        JWT_SECRET
+      );
       await Account.create({
         userId,
         balance: 1 + Math.random() * 1000,
@@ -55,6 +61,7 @@ router.post("/signup", async (req, res) => {
 
       res.json({
         message: "User created successfully",
+        token,
       });
     });
   } catch (error) {
@@ -141,22 +148,16 @@ router.get("/bulk", async (req, res) => {
 
     const users = await User.find({
       $or: [
-        {
-          firstname: {
-            $regex: filter,
-          },
-          lastname: {
-            $regex: filter,
-          },
-        },
+        { firstname: { $regex: filter } },
+        { lastname: { $regex: filter } },
       ],
     });
 
     res.json({
       users: users.map((user) => ({
         username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: user.firstname,
+        lastName: user.lastname,
         _id: user._id,
       })),
     });
@@ -166,5 +167,4 @@ router.get("/bulk", async (req, res) => {
     });
   }
 });
-
 module.exports = router;

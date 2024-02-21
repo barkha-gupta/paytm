@@ -20,19 +20,6 @@ router.get("/balance", authMiddleware, async (req, res) => {
 });
 
 router.post("/transfer", authMiddleware, async (req, res) => {
-  const transferBody = zod.object({
-    to: zod.string(),
-    amount: zod.number(),
-  });
-
-  const { success } = transferBody.safeParse(req.body);
-
-  if (!success) {
-    return res.status(411).json({
-      message: "Incorrect inputs",
-    });
-  }
-
   try {
     const session = await mongoose.startSession();
 
