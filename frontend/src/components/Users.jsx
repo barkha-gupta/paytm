@@ -25,9 +25,12 @@ const Users = () => {
         ></input>
       </div>
       <div>
-        {users.map((user) => (
-          <User user={user} key={user._id} />
-        ))}
+        {users.map((user, index) => {
+          if (index < 10) {
+            return <User user={user} key={user._id} />;
+          }
+          return null;
+        })}
       </div>
     </>
   );

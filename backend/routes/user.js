@@ -167,4 +167,19 @@ router.get("/bulk", async (req, res) => {
     });
   }
 });
+
+router.get("/", authMiddleware, async (req, res) => {
+  const user = await User.findOne({
+    _id: req.userId,
+  });
+  if (!user) {
+    return res.status(400).json({
+      message: "Error while gettng user!",
+    });
+  }
+  res.json({
+    message: "User found",
+    user,
+  });
+});
 module.exports = router;
