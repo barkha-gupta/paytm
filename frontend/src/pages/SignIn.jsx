@@ -13,15 +13,21 @@ const Signin = () => {
   const navigate = useNavigate();
 
   async function userSignin() {
-    const response = await axios.post(
-      "http://localhost:8000/api/v1/user/signin",
-      {
-        username,
-        password,
-      }
-    );
-    localStorage.setItem("token", response.data.token);
-    navigate("/dashboard");
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/user/signin",
+        {
+          username,
+          password,
+        }
+      );
+      localStorage.setItem("token", response.data.token);
+
+      navigate("/dashboard");
+    } catch (error) {
+      const errorMsg = error.response.data.message;
+      alert(errorMsg);
+    }
   }
   return (
     <div className="bg-slate-300 h-screen flex justify-center">

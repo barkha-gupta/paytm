@@ -13,6 +13,25 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
+  async function userSignup() {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/user/signup",
+        {
+          username,
+          firstname,
+          lastname,
+          password,
+        }
+      );
+      localStorage.setItem("token", response.data.token);
+      navigate("/dashboard");
+    } catch (error) {
+      const errorMsg = error.response.data.message;
+      alert(errorMsg);
+    }
+  }
+
   return (
     <div className="bg-slate-300 h-screen flex justify-center">
       <div className="flex flex-col justify-center">
@@ -48,22 +67,7 @@ const SignUp = () => {
             }}
           />
           <div className="pt-4">
-            <Button
-              label={"Sign up"}
-              onClick={async () => {
-                const response = await axios.post(
-                  "http://localhost:8000/api/v1/user/signup",
-                  {
-                    username,
-                    firstname,
-                    lastname,
-                    password,
-                  }
-                );
-                localStorage.setItem("token", response.data.token);
-                navigate("/dashboard");
-              }}
-            />
+            <Button label={"Sign up"} onClick={userSignup} />
           </div>
           <BottomWarning
             label={"Already have an account?"}
