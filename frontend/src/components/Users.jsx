@@ -2,10 +2,17 @@ import { useEffect, useState } from "react";
 import Button from "./Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PaginationSection from "./Pagination";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+
+  const lastItemIndex = currentPage * itemsPerPage;
+  const firstItemIndex = lastItemIndex - itemsPerPage;
+  const currentItems = users.slice(firstItemIndex, lastItemIndex);
 
   //debouncing can be added here, remove your name
   useEffect(() => {
@@ -25,12 +32,17 @@ const Users = () => {
         ></input>
       </div>
       <div>
-        {users.map((user, index) => {
-          if (index < 10) {
-            return <User user={user} key={user._id} />;
-          }
-          return null;
+        {currentItems.map((user) => {
+          return <User user={user} key={user._id} />;
         })}
+      </div>
+      <div className="mt-4">
+        <PaginationSection
+          totalItems={users.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </>
   );
