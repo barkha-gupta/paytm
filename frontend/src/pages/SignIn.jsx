@@ -6,25 +6,29 @@ import InputBox from "../components/InputBox";
 import SubHeading from "../components/SubHeading";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 
 const Signin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   async function userSignin() {
     try {
+      setIsLoading(true);
       const response = await axios.post(
-        "http://localhost:8000/api/v1/user/signin",
+        "https://paytm-backend-l42x.onrender.com/api/v1/user/signin",
         {
           username,
           password,
         }
       );
+      setIsLoading(false);
       localStorage.setItem("token", response.data.token);
-
       navigate("/dashboard");
     } catch (error) {
+      setIsLoading(false);
       const errorMsg = error.response.data.message;
       alert(errorMsg);
     }
@@ -46,11 +50,14 @@ const Signin = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <div className="pt-4">
-            <Button label={"Sign in"} onClick={userSignin} />
+            <Button
+              label={isLoading ? <Loader /> : "Sign In"}
+              onClick={userSignin}
+            />
           </div>
           <BottomWarning
             label={"Don't have an account?"}
-            buttonText={"Sign up"}
+            buttonText={"Sign Up"}
             to={"/signup"}
           />
         </div>

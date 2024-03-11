@@ -17,7 +17,10 @@ const Users = () => {
   //debouncing can be added here, remove your name
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/v1/user/bulk?filter=" + filter)
+      .get(
+        "https://paytm-backend-l42x.onrender.com/api/v1/user/bulk?filter=" +
+          filter
+      )
       .then((response) => setUsers(response.data.users));
   }, [filter]);
   return (

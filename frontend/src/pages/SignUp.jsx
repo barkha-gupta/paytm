@@ -6,17 +6,20 @@ import Heading from "../components/Heading";
 import InputBox from "../components/InputBox";
 import SubHeading from "../components/SubHeading";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 const SignUp = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   async function userSignup() {
     try {
+      setIsLoading(true);
       const response = await axios.post(
-        "http://localhost:8000/api/v1/user/signup",
+        "https://paytm-backend-l42x.onrender.com/api/v1/user/signup",
         {
           username,
           firstname,
@@ -24,9 +27,11 @@ const SignUp = () => {
           password,
         }
       );
+      setIsLoading(false);
       localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
     } catch (error) {
+      setIsLoading(false);
       const errorMsg = error.response.data.message;
       alert(errorMsg);
     }
@@ -67,7 +72,10 @@ const SignUp = () => {
             }}
           />
           <div className="pt-4">
-            <Button label={"Sign up"} onClick={userSignup} />
+            <Button
+              label={isLoading ? <Loader /> : "Sign In"}
+              onClick={userSignup}
+            />
           </div>
           <BottomWarning
             label={"Already have an account?"}

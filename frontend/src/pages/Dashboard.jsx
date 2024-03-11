@@ -11,7 +11,7 @@ const Dashboard = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios
-      .get("http://localhost:8000/api/v1/user", {
+      .get("https://paytm-backend-l42x.onrender.com/api/v1/user", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -20,7 +20,7 @@ const Dashboard = () => {
 
     //to get balance of user
     axios
-      .get("http://localhost:8000/api/v1/account/balance", {
+      .get("https://paytm-backend-l42x.onrender.com/api/v1/account/balance", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
