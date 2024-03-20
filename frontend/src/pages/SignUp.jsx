@@ -58,7 +58,7 @@ const SignUp = () => {
             }}
           />
           <InputBox
-            placeholder="harkirat@gmail.com"
+            placeholder="john@gmail.com"
             label={"Email"}
             onChange={(e) => {
               setUsername(e.target.value);

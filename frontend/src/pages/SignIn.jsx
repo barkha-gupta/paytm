@@ -40,7 +40,7 @@ const Signin = () => {
           <Heading label={"Sign in"} />
           <SubHeading label={"Enter your credentials to access your account"} />
           <InputBox
-            placeholder="harkirat@gmail.com"
+            placeholder="john@gmail.com"
             label={"Email"}
             onChange={(e) => setUsername(e.target.value)}
           />
